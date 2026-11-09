@@ -20,8 +20,11 @@ noms propres, années, albums, pochettes, doublons, reprises, genres, tags compa
 3. **Réglages → Claude** : coller la clé API (voir plus bas). Sans clé, tout fonctionne quand même,
    les cas difficiles vont simplement dans « À vérifier ».
 
-Ensuite il suffit de **déposer de nouvelles musiques dans le dossier** : Platine les range tout seul
-(option « Ranger automatiquement », active par défaut, quand le logiciel est ouvert).
+Ensuite il suffit de **déposer de nouvelles musiques dans le dossier** : Platine prévient qu'elles
+sont arrivées, et les range quand on clique sur « Ranger maintenant » (jamais tout seul).
+
+**Clé USB de destination** (facultatif) : Platine renomme les musiques du dossier puis les classe sur
+une clé déjà organisée (dossier du genre, `VRAC`, `xxxRECENTS` pour 2020 et après, `xxxNOUVEAUTES`).
 
 ## Ce que fait un rangement
 
