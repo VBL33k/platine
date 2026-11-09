@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Platine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient" id="ambient" aria-hidden="true"></div>
+<div class="app">
+  <nav class="rail" aria-label="Navigation">
+    <div class="brand">
+      <span class="brand-disc" id="brandDisc" aria-hidden="true"></span>
+      <span>Platine</span>
+    </div>
+    <button class="nav on" data-view="home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Accueil</span></button>
+    <button class="nav" data-view="work"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/><path d="M12 3.5v3M20.5 12h-3"/></svg><span>Rangement</span><i class="dot" id="runDot" hidden></i></button>
+    <button class="nav" data-view="review"><svg viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 8v4.5M12 16v.2"/></svg><span>À vérifier</span><b id="badge" hidden></b></button>
+    <button class="nav" data-view="library"><svg viewBox="0 0 24 24"><path d="M4 5h4v14H4zM10 5h4v14h-4zM16.5 5.5l3.5 13"/></svg><span>Bibliothèque</span></button>
+    <button class="nav" data-view="settings"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>Réglages</span></button>
+    <div class="claude-card" id="claudeCard">
+      <div class="cc-top"><span>Claude ce mois-ci</span><strong id="ccAmount">—</strong></div>
+      <div class="meter-sm"><i id="ccFill"></i></div>
+      <small id="ccHint"></small>
+    </div>
+  </nav>
+
+  <main id="main">
+    <div class="update-bar" id="updateBar" hidden>
+      <span class="ub-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg></span>
+      <div class="ub-text"><strong id="ubTitle">Une nouvelle version de Platine est disponible</strong><span id="ubSub">Tes musiques, ta bibliothèque et tes réglages sont conservés.</span>
+        <div class="bar sm" id="ubBar" hidden><i id="ubFill"></i></div></div>
+      <button class="btn primary" id="ubBtn">Mettre à jour</button>
+      <button class="icon-btn" id="ubClose" title="Plus tard" aria-label="Plus tard"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <!-- ACCUEIL -->
+    <section class="view on" id="home">
+      <div class="hero">
+        <div class="deck" id="deck">
+          <div class="plinth">
+            <div class="platter"><div class="vinyl" id="vinyl"><div class="label" id="discLabel"></div></div></div>
+            <svg class="tonearm" viewBox="0 0 120 300" aria-hidden="true">
+              <circle cx="88" cy="34" r="24" class="base"/><circle cx="88" cy="34" r="9" class="pivot"/>
+              <path d="M88 34 L92 200 L70 262" class="rod"/><rect x="58" y="252" width="26" height="34" rx="4" class="head" transform="rotate(25 71 269)"/>
+            </svg>
+            <span class="led" id="led"></span>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="lcd" aria-live="polite"><span class="lcd-src" id="lcdSrc">USB</span><div class="lcd-window"><span id="lcd">PLATINE</span></div></div>
+          <h1 id="homeTitle">Ta musique, rangée toute seule.</h1>
+          <p class="lede" id="homeLede"></p>
+          <button class="folder" id="folderBtn" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 7.5A2 2 0 0 1 5 5.5h4l2 2h8a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <span class="folder-text"><small>Dossier de la musique</small><span id="folderPath">Choisir un dossier</span></span>
+            <span class="folder-act">Changer</span>
+          </button>
+          <button class="folder usb" id="usbBtn" type="button">
+            <svg viewBox="0 0 24 24"><path d="M8 3h8v6H8zM6 9h12v8a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4zM10.5 5.5v1M13.5 5.5v1"/></svg>
+            <span class="folder-text"><small>Clé USB de destination</small><span id="usbPath">Aucune : rangement dans le dossier lui-même</span></span>
+            <span class="folder-act">Choisir</span>
+          </button>
+          <div class="actions">
+            <button class="btn primary big" id="goBtn">Ranger maintenant</button>
+            <button class="btn ghost" id="openBtn">Ouvrir le dossier</button>
+          </div>
+          <p class="summary" id="summary"></p>
+        </div>
+      </div>
+      <div class="section-head"><h2>Derniers arrivés</h2><button class="btn text" data-go="library">Toute la bibliothèque</button></div>
+      <div class="crate" id="recent"></div>
+    </section>
+
+    <!-- RANGEMENT -->
+    <section class="view" id="work">
+      <header class="vhead">
+        <div><h1>Rangement</h1><p class="sub" id="workSub">Chaque morceau traité apparaît ici, le plus récent en haut.</p></div>
+        <div class="vhead-actions">
+          <button class="btn ghost danger" id="stopBtn" hidden>Arrêter</button>
+          <button class="btn ghost" id="fullBtn" title="Repasse sur tous les morceaux du dossier, même ceux déjà rangés">Tout revérifier</button>
+          <button class="btn ghost" id="undoBtn">Annuler le dernier rangement</button>
+          <button class="btn primary" id="goBtn2">Ranger maintenant</button>
+        </div>
+      </header>
+      <section class="run" id="run" hidden>
+        <div class="run-top">
+          <div class="run-head"><strong id="runTitle">Rangement en cours</strong><span id="runMeta"></span></div>
+          <span class="run-pct" id="runPct">0 %</span>
+        </div>
+        <div class="bar big"><i id="runFill"></i></div>
+        <ol class="stages" id="stages"></ol>
+      </section>
+      <h2 class="feed-title" id="feedTitle" hidden>Morceaux traités</h2>
+      <ol class="feed" id="feed"></ol>
+      <div class="empty" id="feedEmpty">
+        <div class="empty-disc" aria-hidden="true"></div>
+        <strong>Rien en cours</strong>
+        <span>Dépose des musiques dans ton dossier, ou lance un rangement.</span>
+      </div>
+    </section>
+
+    <!-- A VERIFIER -->
+    <section class="view" id="review">
+      <header class="vhead"><div><h1>À vérifier</h1><p class="sub">Les rares cas où Platine préfère te demander plutôt que de se tromper.</p></div></header>
+      <div class="questions" id="questions"></div>
+    </section>
+
+    <!-- BIBLIOTHEQUE -->
+    <section class="view" id="library">
+      <header class="vhead">
+        <div><h1>Bibliothèque</h1><p class="sub" id="libSub"></p></div>
+        <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input type="search" id="search" placeholder="Artiste, titre, album…" aria-label="Chercher"></label>
+      </header>
+      <div class="lib-bar">
+        <div class="seg" role="tablist" aria-label="Affichage">
+          <button class="on" data-mode="albums" role="tab">Albums</button>
+          <button data-mode="tracks" role="tab">Morceaux</button>
+        </div>
+      </div>
+      <div class="bins" id="bins"></div>
+      <div class="sleeves" id="sleeves"></div>
+      <button class="btn ghost more" id="moreBtn" hidden>Afficher plus</button>
+    </section>
+
+    <!-- REGLAGES -->
+    <section class="view" id="settings">
+      <header class="vhead"><div><h1>Réglages</h1></div></header>
+      <div class="panels">
+        <section class="panel">
+          <h2>Ma musique</h2>
+          <div class="row"><div class="row-text"><strong>Dossier de la musique</strong><small id="setFolder">—</small></div><button class="btn ghost" id="pickFolder2">Changer</button></div>
+          <div class="row"><div class="row-text"><strong>Clé USB de destination</strong><small id="setUsb">Aucune</small></div><div class="vhead-actions"><button class="btn ghost" id="clearUsb" hidden>Retirer</button><button class="btn ghost" id="pickUsb2">Choisir</button></div></div>
+          <div class="row"><div class="row-text"><strong>Me prévenir quand de nouvelles musiques arrivent</strong><small>Un message s'affiche quand tu en déposes dans le dossier. Platine ne range jamais rien tout seul : c'est toujours toi qui lances le rangement.</small></div><button class="toggle" role="switch" aria-checked="false" data-k="watch"><i></i></button></div>
+          <div class="row"><div class="row-text"><strong>Copier dans les dossiers de genre</strong><small>Chaque morceau reste en vrac et existe aussi dans son dossier (Rock, Punk, Rap FR…). Sans effet quand une clé USB est choisie : c'est alors la clé qui est classée.</small></div><button class="toggle" role="switch" aria-checked="false" data-k="genre_folders"><i></i></button></div>
+          <div class="row"><div class="row-text"><strong>Dossier « Cover » pour les reprises</strong><small>Une copie de chaque reprise en plus.</small></div><button class="toggle" role="switch" aria-checked="false" data-k="cover_folder"><i></i></button></div>
+          <div class="row"><div class="row-text"><strong>Ouvrir Platine au démarrage de Windows</strong><small>Il s'ouvre en réduit dans la barre des tâches.</small></div><button class="toggle" role="switch" aria-checked="false" data-k="autostart"><i></i></button></div>
+        </section>
+        <section class="panel">
+          <h2>Claude, l'assistant pour les cas difficiles</h2>
+          <div class="row"><div class="row-text"><strong>Utiliser Claude</strong><small>Retrouve les années, genres et reprises introuvables ailleurs. Appelé seulement pour les morceaux qui en ont besoin.</small></div><button class="toggle" role="switch" aria-checked="false" data-k="ai_enabled"><i></i></button></div>
+          <div class="row col">
+            <div class="row-text"><strong>Clé API</strong><small id="keyState">Aucune clé</small></div>
+            <div class="field-line">
+              <div class="field"><input type="password" id="apiKey" placeholder="Colle ta clé : sk-ant-…" autocomplete="off" spellcheck="false"><button class="icon-btn" id="eyeBtn" title="Afficher la clé" type="button"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+              <button class="btn primary" id="saveKey">Enregistrer</button>
+            </div>
+            <div class="field-line" id="wsRow" hidden>
+              <div class="field"><input id="apiWs" placeholder="ID du workspace : wrkspc_…" autocomplete="off" spellcheck="false"></div>
+            </div>
+            <p class="notice" id="keyErr" hidden></p>
+          </div>
+          <div class="row"><div class="row-text"><strong>Plafond par mois</strong><small>Au-delà, Claude n'est plus appelé jusqu'au mois suivant.</small></div>
+            <div class="stepper"><button type="button" data-step="-0.5" aria-label="Diminuer">−</button><output id="budget">1,00 €</output><button type="button" data-step="0.5" aria-label="Augmenter">+</button></div></div>
+          <div class="row col">
+            <div class="row-text"><strong>Ce mois-ci</strong><small id="spendText">—</small></div>
+            <div class="meter-lg"><i id="spendFill"></i></div>
+            <ul class="spend-list" id="spendList"></ul>
+          </div>
+        </section>
+        <section class="panel">
+          <h2>Mises à jour</h2>
+          <div class="row"><div class="row-text"><strong id="verTitle">Platine</strong><small id="verText">Platine vérifie tout seul s'il existe une nouvelle version, au démarrage.</small></div><button class="btn ghost" id="checkUpd">Rechercher une mise à jour</button></div>
+        </section>
+        <section class="panel">
+          <h2>Remise à zéro</h2>
+          <div class="row"><div class="row-text"><strong>Remettre Platine comme au premier jour</strong><small>Efface la bibliothèque, les réglages, l'historique et les questions. Tes musiques ne sont jamais touchées, et ta clé API est gardée.</small></div><button class="btn ghost danger" id="resetBtn">Remettre à zéro</button></div>
+        </section>
+        <p class="about" id="about"></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- fenetre de modification -->
+<div class="modal" id="editModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <div class="sheet-head"><div class="sheet-cover" id="editCover"></div><div><h2 id="editTitle">Modifier le morceau</h2><p class="sub" id="editName"></p></div></div>
+    <div class="grid2">
+      <label class="lbl">Artiste<input id="fArtist"></label>
+      <label class="lbl">Titre<input id="fTitle"></label>
+      <label class="lbl">Année<input id="fYear" inputmode="numeric" maxlength="4"></label>
+      <label class="lbl">Reprise de<input id="fCover" placeholder="Vide si c'est l'original"></label>
+    </div>
+    <div class="lbl">Genre</div>
+    <div class="genre-pick" id="fGenre"></div>
+    <div class="sheet-foot"><button class="btn ghost" data-close>Annuler</button><button class="btn primary" id="editSave">Enregistrer</button></div>
+  </div>
+</div>
+
+<!-- un album -->
+<div class="modal" id="albumModal" hidden>
+  <div class="sheet wide" role="dialog" aria-modal="true" aria-labelledby="albumTitle">
+    <div class="sheet-head"><div class="sheet-cover big" id="albumCover"></div><div><h2 id="albumTitle"></h2><p class="sub" id="albumSub"></p></div>
+      <button class="icon-btn close" data-close aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <ol class="tracklist" id="albumTracks"></ol>
+  </div>
+</div>
+
+<!-- confirmation -->
+<div class="modal" id="confirmModal" hidden>
+  <div class="sheet small" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle"></h2>
+    <p id="confirmText"></p>
+    <div class="sheet-foot"><button class="btn ghost" id="confirmNo">Non, garder</button><button class="btn primary" id="confirmYes">Oui</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
